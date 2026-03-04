@@ -1,0 +1,14 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build: ./web
+    ports:
+      - "9000:9000"
+    depends_on:
+      - backend
+
+volumes:
