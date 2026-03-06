@@ -5,19 +5,19 @@ import (
 	"backend/cmd/config"
 	"backend/cmd/database"
 	server "backend/cmd/server"
-	"log"
+	"log/slog"
+
 	"github.com/joho/godotenv"
 )
 
 func main () {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal(err)
+	if err := godotenv.Load(); err != nil {
+    	slog.Info("[WARNING] Missing .env file, using environment variables")
 	}
 
 	cfg := config.NewConfig()
-	if err = cfg.Validate(); err != nil {
-		log.Fatal(err)
+	if err := cfg.Validate(); err != nil {
+		slog.Info("[WARNING]", "error", err)
 	}
 
 	db := database.NewDatabaseConnection(cfg.DBConf.DBAddr)

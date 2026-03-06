@@ -46,7 +46,7 @@ async function handleShorten() {
   const expiryMap = {'1d': 1, '3d': 3, '7d' : 7, '30d': 30 };
 
   // ── Replace this await with your actual fetch() to your backend ──
-  const res = await fetch(`${BACKEND_URL}/shorten`,{
+  const res = await fetch(`${BACKEND_URL}/api/shorten`,{
     method: "POST",
     headers: {"Content-type":"application/json"},
     body: JSON.stringify({
@@ -62,11 +62,11 @@ async function handleShorten() {
     return
   }
   
-  console.info(res.status)
+  console.info(res.status, "Fetch succeed")
   const data = await res.json();
   console.log("> ", data)
 
-  const shortUrl = `localhost:8080/${data.ShortCode}`; // change this to domain name after deployment
+  const shortUrl = `localhost/${data}`; // change this to domain name after deployment
 
   shortUrlDisplay.textContent = shortUrl;
   origUrlDisplay.textContent  = url;

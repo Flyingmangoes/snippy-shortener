@@ -16,7 +16,6 @@ type Application struct {
 }
 
 type AppConfig struct {
-	BaseURL string
 	CustomAliasLength int
 }
 
@@ -45,10 +44,6 @@ func (a *Application) Validate() error {
 		return errors.New("DB_URL is required")
 	}
 
-	if a.AppConf.BaseURL == "" {
-        return errors.New("VITE_URL is required")
-    }
-
 	if a.ServConf.Host == "" {
 		return errors.New("SERV_HOST is required")
 	}
@@ -74,7 +69,6 @@ func NewConfig() *Application{
 			Port: os.Getenv("SERV_PORT"),
 		},
 		AppConf: &AppConfig{
-			BaseURL: os.Getenv("VITE_URL"),
 			CustomAliasLength: 6,
 		},
 		CacheConf: &CacheConfig{

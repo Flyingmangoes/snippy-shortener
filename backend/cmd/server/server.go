@@ -19,7 +19,7 @@ func Start(cfg *config.Application, urlStore *model.UrlStore) {
 	mux := http.NewServeMux()
 	urlHandler := handler.NewHandler(urlStore, cfg)
 
-	mux.HandleFunc("POST /shorten", urlHandler.ShorteningUrlHandler)
+	mux.HandleFunc("POST /api/shorten", urlHandler.ShorteningUrlHandler)
 	mux.HandleFunc("GET /{shortcode}", urlHandler.RedirectUrlHandler)
 	
 	var h http.Handler = mux
