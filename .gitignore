@@ -23,7 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 
-/migrations/*
 .env
 database.env
 /web/.env

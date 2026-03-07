@@ -1,0 +1,10 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+CREATE TABLE IF NOT EXISTS urls (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4() NOT NULL,
+    originalurl TEXT NOT NULL,
+    shortcode VARCHAR(30) UNIQUE NOT NULL,
+    createdat TIMESTAMP DEFAULT NOW(),
+    expiryat TIMESTAMP NOT NULL,
+    is_custom BOOLEAN DEFAULT FALSE
+);
