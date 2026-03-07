@@ -60,7 +60,7 @@ func (h *Handler)ShorteningUrlHandler (w http.ResponseWriter, r *http.Request) {
         	http.Error(w, "Alias already taken", http.StatusConflict) // 409
         	return
     	}
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		http.Error(w, "Error while creating url", http.StatusInternalServerError)
 		return
 	}
 
@@ -84,7 +84,7 @@ func (h *Handler)RedirectUrlHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		slog.Info("[ERROR]", "err", err)
     	if errors.Is(err, sql.ErrNoRows) {	
-        	http.Error(w, "Row not exist", http.StatusGone) 
+        	http.Error(w, "Row not exist", http.StatusNotFound) 
         	return
     	}
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
@@ -93,7 +93,7 @@ func (h *Handler)RedirectUrlHandler(w http.ResponseWriter, r *http.Request) {
 
 	if url == nil {
 		slog.Info("[ERROR]", "err", err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		http.Error(w, "Error while getting url", http.StatusInternalServerError)
 		return
 	}
 
@@ -101,15 +101,15 @@ func (h *Handler)RedirectUrlHandler(w http.ResponseWriter, r *http.Request) {
 		err = h.store.DeleteExpiredUrl(r.Context())
 		if err != nil {
 			slog.Info("[ERROR]", "err", err)
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			http.Error(w, "Error while deleting expired url", http.StatusInternalServerError)
 			return
 		}
 
-		http.Error(w, "Link has expired", http.StatusGone) // 410 Gone
+		http.Error(w, "Link has expired", http.StatusGone) 
         return
 	}
 	slog.Info("[PROCESS]", "redirecting", url.OriginalUrl)
-	http.Redirect(w, r, url.OriginalUrl, http.StatusTemporaryRedirect)
+	http.Redirect(w, r, url.OriginalUrl, http.StatusPermanentRedirect)
 	slog.Info("======= [END MESSAGE] =======")
 }
 

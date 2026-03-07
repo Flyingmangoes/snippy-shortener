@@ -10,7 +10,6 @@ import (
 type UrlStoreInterface interface {
 	CreateUrl(ctx context.Context, originalUrl string, sc *string, isCustom bool, expires time.Time) (*Url, error) 
 	GetUrlByShortcode(ctx context.Context, sc string) (*Url, error)
-	GetUrlByOriginalUrl(ctx context.Context, originalUrl string) (*Url, error)
 	DeleteExpiredUrl(ctx context.Context) error 
 }
 
@@ -60,27 +59,6 @@ func (store *UrlStore) GetUrlByShortcode(ctx context.Context, sc string) (*Url, 
 
 	if err == sql.ErrNoRows {
 		return nil, err
-	}
-
-	if err != nil {
-		return nil, err
-	}
-
-	return newUrl, nil
-}
-
-func (store *UrlStore) GetUrlByOriginalUrl(ctx context.Context, originalUrl string) (*Url, error) {
-	newUrl := &Url{}
-
-	err := store.db.QueryRowContext(ctx,
-		`SELECT id, originalurl, shortcode, is_custom, createdat, expiryat
-		FROM urls
-		WHERE originalurl = $1`,
-		originalUrl,
-	).Scan(&newUrl.ID, &newUrl.OriginalUrl, &newUrl.ShortCode, &newUrl.CreatedAt, &newUrl.ExpiryAt, &newUrl.IsCustom)
-
-	if err == sql.ErrNoRows {
-		return nil, nil
 	}
 
 	if err != nil {
